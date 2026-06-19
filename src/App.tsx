@@ -174,8 +174,8 @@ function Dashboard({ onBack }: { onBack: () => void }) {
 
       <div className="w-full max-w-4xl pt-28 px-4 sm:px-6 md:px-0 flex-1 flex flex-col pb-12">
         <header className="w-full text-center mb-10">
-          <h1 className="text-4xl font-display font-bold text-slate-900 dark:text-white tracking-tight mb-3">Product Documentation</h1>
-          <p className="text-slate-500 dark:text-slate-400 text-lg max-w-xl mx-auto">
+          <h1 className="text-3xl md:text-4xl font-display font-bold text-slate-900 dark:text-white tracking-tight mb-3">Product Documentation</h1>
+          <p className="text-slate-500 dark:text-slate-400 text-base md:text-lg max-w-xl mx-auto">
             Describe your project idea and instantly generate professional documentation.
           </p>
         </header>
@@ -322,11 +322,14 @@ function Dashboard({ onBack }: { onBack: () => void }) {
 }
 
 export default function App() {
-  const [showDashboard, setShowDashboard] = useState(false);
+  const [showDashboard, setShowDashboard] = useState(() => {
+    return localStorage.getItem('productpilot_logged_in') === 'true';
+  });
   const [showAuthModal, setShowAuthModal] = useState(false);
   const [authMode, setAuthMode] = useState<'login' | 'signup'>('signup');
 
   const handleAuthSuccess = () => {
+    localStorage.setItem('productpilot_logged_in', 'true');
     setShowAuthModal(false);
     setShowDashboard(true);
   };
@@ -339,7 +342,10 @@ export default function App() {
   return (
     <ThemeProvider>
       {showDashboard ? (
-        <Dashboard onBack={() => setShowDashboard(false)} />
+        <Dashboard onBack={() => {
+          localStorage.removeItem('productpilot_logged_in');
+          setShowDashboard(false);
+        }} />
       ) : (
         <LandingPage onLogin={() => openAuth('login')} onSignup={() => openAuth('signup')} />
       )}

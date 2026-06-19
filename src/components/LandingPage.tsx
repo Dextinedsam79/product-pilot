@@ -121,9 +121,9 @@ export function LandingPage({ onLogin, onSignup }: { onLogin: () => void, onSign
           AI-Powered Business Analysis Platform
         </div>
         
-        <h1 className="text-5xl md:text-7xl font-display font-bold tracking-tight mb-6 leading-[1.1] text-slate-900 dark:text-white">
-          Turn Ideas Into<br />
-          <span className="text-[#3b82f6]">Complete Project<br/>Documentation</span> in Minutes
+        <h1 className="text-4xl sm:text-5xl md:text-7xl font-display font-bold tracking-tight mb-6 leading-[1.1] text-slate-900 dark:text-white">
+          Turn Ideas Into<br className="hidden sm:block" />
+          <span className="text-[#3b82f6]"> Complete Project Documentation</span> in Minutes
         </h1>
         
         <p className="text-lg md:text-xl text-slate-600 dark:text-slate-400 mb-10 max-w-2xl mx-auto leading-relaxed">
@@ -143,36 +143,36 @@ export function LandingPage({ onLogin, onSignup }: { onLogin: () => void, onSign
         </p>
 
         {/* Hero Mockup */}
-        <div className="w-full mt-20 relative max-w-[1100px] aspect-[16/10] bg-[#eef2fa] dark:bg-[#1a2333] rounded-2xl overflow-hidden shadow-2xl border border-slate-200 dark:border-slate-800 transform rotate-1 hover:rotate-0 transition-transform duration-500">
+        <div className="w-full mt-10 md:mt-20 relative max-w-[1100px] h-[500px] md:h-auto md:aspect-[16/10] bg-[#eef2fa] dark:bg-[#1a2333] rounded-2xl overflow-hidden shadow-2xl border border-slate-200 dark:border-slate-800 transform md:rotate-1 md:hover:rotate-0 transition-transform duration-500">
           {/* Faux UI */}
-          <div className="absolute inset-0 p-8 flex flex-col">
-            <div className="flex items-center justify-between mb-8">
+          <div className="absolute inset-0 p-4 md:p-8 flex flex-col overflow-hidden">
+            <div className="flex items-center justify-between mb-6 md:mb-8">
               <div className="flex items-center text-[#3b82f6]">
-                 <Plane className="w-6 h-6 mr-2" />
-                 <span className="font-display font-bold text-xl text-slate-800 dark:text-slate-200">ProductPilot</span>
+                 <Plane className="w-5 h-5 md:w-6 md:h-6 mr-2" />
+                 <span className="font-display font-bold text-lg md:text-xl text-slate-800 dark:text-slate-200">ProductPilot</span>
               </div>
               <div className="flex gap-4">
-                <div className="h-2 w-20 bg-slate-200 dark:bg-slate-700 rounded-full"></div>
+                <div className="hidden sm:block h-2 w-20 bg-slate-200 dark:bg-slate-700 rounded-full"></div>
                 <div className="h-2 w-12 bg-[#3b82f6] rounded-full"></div>
               </div>
             </div>
             
-            <h2 className="text-2xl font-bold text-slate-800 dark:text-slate-100 mb-6 font-display text-left">Project Documentation</h2>
+            <h2 className="text-xl md:text-2xl font-bold text-slate-800 dark:text-slate-100 mb-4 md:mb-6 font-display text-left">Project Documentation</h2>
             
-            <div className="grid grid-cols-3 gap-6 flex-1">
+            <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4 md:gap-6 flex-1 min-h-0">
               {/* BRD Doc */}
               <div className="bg-white dark:bg-[#0f172a] p-4 rounded-xl shadow-sm border border-slate-200 dark:border-slate-800/50 flex flex-col text-left">
                 <div className="font-semibold text-sm mb-4 text-slate-800 dark:text-slate-200 border-b border-slate-100 dark:border-slate-800 pb-2">BRD</div>
                 <div className="h-2 w-3/4 bg-slate-200 dark:bg-slate-700 rounded-full mb-2"></div>
                 <div className="h-2 w-full bg-slate-100 dark:bg-slate-800 rounded-full mb-2"></div>
                 <div className="h-2 w-5/6 bg-slate-100 dark:bg-slate-800 rounded-full mb-6"></div>
-                <div className="flex-1 flex items-center justify-center">
-                  <div className="w-24 h-24 rounded-full border-8 border-[#3b82f6] border-t-[#22c55e] border-r-slate-200 dark:border-r-slate-700"></div>
+                <div className="flex-1 flex items-center justify-center min-h-[100px]">
+                  <div className="w-20 h-20 md:w-24 md:h-24 rounded-full border-8 border-[#3b82f6] border-t-[#22c55e] border-r-slate-200 dark:border-r-slate-700"></div>
                 </div>
               </div>
               
               {/* PRD Doc */}
-              <div className="bg-white dark:bg-[#0f172a] p-4 rounded-xl shadow-sm border border-slate-200 dark:border-slate-800/50 flex flex-col text-left">
+              <div className="bg-white dark:bg-[#0f172a] p-4 rounded-xl shadow-sm border border-slate-200 dark:border-slate-800/50 flex flex-col text-left hidden sm:flex">
                 <div className="font-semibold text-sm mb-4 text-slate-800 dark:text-slate-200 border-b border-slate-100 dark:border-slate-800 pb-2">Stories</div>
                 <div className="space-y-4">
                   {[1,2,3].map(i => (
@@ -190,11 +190,11 @@ export function LandingPage({ onLogin, onSignup }: { onLogin: () => void, onSign
               </div>
 
                {/* Chart Doc */}
-               <div className="bg-white dark:bg-[#0f172a] p-4 rounded-xl shadow-sm border border-slate-200 dark:border-slate-800/50 flex flex-col text-left">
+               <div className="bg-white dark:bg-[#0f172a] p-4 rounded-xl shadow-sm border border-slate-200 dark:border-slate-800/50 flex flex-col text-left hidden md:flex">
                 <div className="font-semibold text-sm mb-4 text-slate-800 dark:text-slate-200 border-b border-slate-100 dark:border-slate-800 pb-2">Analytics</div>
-                <div className="flex-1 flex items-end justify-between px-2 pt-2 h-full">
+                <div className="flex-1 flex items-end justify-between px-2 pt-2 h-full min-h-[100px]">
                   {[40, 70, 45, 90, 65, 80].map((h, i) => (
-                    <div key={i} className="w-6 bg-[#3b82f6] rounded-t-sm" style={{ height: `${h}%`, opacity: 0.8 + (i*0.04) }}></div>
+                    <div key={i} className="w-4 md:w-6 bg-[#3b82f6] rounded-t-sm" style={{ height: `${h}%`, opacity: 0.8 + (i*0.04) }}></div>
                   ))}
                 </div>
               </div>
@@ -407,9 +407,9 @@ export function LandingPage({ onLogin, onSignup }: { onLogin: () => void, onSign
       </section>
 
       {/* CTA Bottom Form */}
-      <section className="py-24">
+      <section className="py-12 md:py-24">
         <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="bg-[#3b82f6] rounded-[2rem] p-12 text-center text-white relative overflow-hidden">
+          <div className="bg-[#3b82f6] rounded-[2rem] p-8 md:p-12 text-center text-white relative overflow-hidden">
              <div className="relative z-10">
                <h2 className="text-3xl md:text-5xl font-display font-bold mb-6">
                  Ready to document your next project in minutes?
