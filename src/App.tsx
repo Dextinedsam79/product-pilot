@@ -1,7 +1,10 @@
 import React, { useState, useEffect } from 'react';
-import { Bot, FileText, Download, Loader2, Sparkles, FolderOpen, Save, Trash2, Plus } from 'lucide-react';
+import { Bot, FileText, Download, Loader2, Sparkles, FolderOpen, Save, Trash2, Plus, Plane, ArrowLeft, Sun, Moon, LogOut } from 'lucide-react';
 import Markdown from 'react-markdown';
 import { Project, Artifact, ArtifactType } from './types';
+import { LandingPage } from './components/LandingPage';
+import { ThemeProvider, useTheme } from './context/ThemeContext';
+import { AuthModal } from './components/AuthModal';
 
 const artifactLabels: Record<ArtifactType, string> = {
   'brd': 'Business Requirements',
@@ -11,7 +14,8 @@ const artifactLabels: Record<ArtifactType, string> = {
   'test-cases': 'Test Cases'
 };
 
-function App() {
+function Dashboard({ onBack }: { onBack: () => void }) {
+  const { theme, toggleTheme } = useTheme();
   const [projects, setProjects] = useState<Project[]>(() => {
     try {
       const saved = localStorage.getItem('productpilot_projects');
@@ -147,28 +151,46 @@ function App() {
   };
 
   return (
-    <div className="min-h-screen bg-slate-50 flex flex-col items-center p-6 md:p-12">
-      <header className="w-full max-w-4xl text-center mb-10">
-        <div className="inline-flex items-center justify-center p-3 bg-white rounded-2xl shadow-sm mb-4 border border-slate-100">
-          <Bot className="w-8 h-8 text-blue-600" />
+    <div className="min-h-screen bg-slate-50 dark:bg-[#0B1121] flex flex-col items-center transition-colors duration-300">
+      {/* Navigation */}
+      <nav className="fixed top-0 inset-x-0 bg-white/80 dark:bg-[#0B1121]/80 backdrop-blur-md z-50 border-b border-slate-200 dark:border-slate-800/50">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+          <div className="flex justify-between h-16 items-center">
+            <div className="flex items-center cursor-pointer text-[#3b82f6] hover:opacity-80 transition-opacity" onClick={onBack}>
+               <ArrowLeft className="w-5 h-5 mr-3 text-slate-500 dark:text-slate-400" />
+               <div className="bg-[#3b82f6] text-white p-1 rounded-lg mr-2">
+                 <Plane className="w-4 h-4" />
+               </div>
+               <span className="font-display font-semibold text-lg text-slate-900 dark:text-white">Back</span>
+            </div>
+            <div className="flex items-center gap-4">
+              <button onClick={toggleTheme} className="text-slate-500 hover:text-slate-900 dark:text-slate-400 dark:hover:text-white transition-colors p-1">
+                {theme === 'dark' ? <Sun className="w-5 h-5" /> : <Moon className="w-5 h-5" />}
+              </button>
+            </div>
+          </div>
         </div>
-        <h1 className="text-4xl font-display font-bold text-slate-900 tracking-tight mb-3">ProductPilot</h1>
-        <p className="text-slate-500 text-lg max-w-xl mx-auto">
-          AI-powered business analysis. Describe your project idea and instantly generate professional documentation.
-        </p>
-      </header>
+      </nav>
 
-      {projects.length > 0 && (
+      <div className="w-full max-w-4xl pt-28 px-4 sm:px-6 md:px-0 flex-1 flex flex-col pb-12">
+        <header className="w-full text-center mb-10">
+          <h1 className="text-4xl font-display font-bold text-slate-900 dark:text-white tracking-tight mb-3">Product Documentation</h1>
+          <p className="text-slate-500 dark:text-slate-400 text-lg max-w-xl mx-auto">
+            Describe your project idea and instantly generate professional documentation.
+          </p>
+        </header>
+
+        {projects.length > 0 && (
         <div className="w-full max-w-4xl mb-6 flex items-center overflow-x-auto pb-2 scrollbar-hide gap-3">
           <button
             onClick={startNewProject}
-            className="flex-shrink-0 inline-flex items-center px-4 py-2 bg-white border border-slate-200 rounded-full text-sm font-medium text-blue-600 hover:bg-blue-50 transition-colors"
+            className="flex-shrink-0 inline-flex items-center px-4 py-2 bg-white dark:bg-[#111827] border border-slate-200 dark:border-slate-800 rounded-full text-sm font-medium text-blue-600 dark:text-blue-400 hover:bg-blue-50 dark:hover:bg-blue-900/30 transition-colors"
           >
             <Plus className="w-4 h-4 mr-2" />
             New Project
           </button>
           
-          <div className="h-6 w-px bg-slate-200 mx-1"></div>
+          <div className="h-6 w-px bg-slate-200 dark:bg-slate-800 mx-1"></div>
           
           {projects.map(p => (
             <div 
@@ -176,8 +198,8 @@ function App() {
               onClick={() => loadProject(p)}
               className={`flex-shrink-0 flex items-center px-4 py-2 rounded-full text-sm font-medium cursor-pointer transition-colors border ${
                 activeProject?.id === p.id 
-                  ? 'bg-blue-600 text-white border-blue-600 shadow-sm hover:bg-blue-700' 
-                  : 'bg-white text-slate-700 border-slate-200 hover:bg-slate-50 hover:border-slate-300'
+                  ? 'bg-blue-600 dark:bg-blue-600 text-white border-blue-600 dark:border-blue-600 shadow-sm hover:bg-blue-700' 
+                  : 'bg-white dark:bg-[#111827] text-slate-700 dark:text-slate-300 border-slate-200 dark:border-slate-800 hover:bg-slate-50 dark:hover:bg-slate-800/80 hover:border-slate-300 dark:hover:border-slate-700'
               }`}
             >
               <FolderOpen className="w-4 h-4 mr-2 opacity-70" />
@@ -196,28 +218,28 @@ function App() {
       )}
 
       <main className="w-full max-w-4xl space-y-6">
-        <div className="bg-white rounded-3xl p-6 shadow-sm border border-slate-200">
-          <label htmlFor="idea" className="block text-sm font-medium text-slate-700 mb-2">
+        <div className="bg-white dark:bg-[#111827] rounded-3xl p-6 shadow-sm border border-slate-200 dark:border-slate-800">
+          <label htmlFor="idea" className="block text-sm font-medium text-slate-700 dark:text-slate-300 mb-2">
             Business Idea
           </label>
           <textarea
             id="idea"
             rows={4}
-            className="w-full rounded-2xl border-slate-200 bg-slate-50 p-4 text-slate-900 focus:border-blue-500 focus:ring-blue-500 resize-none"
+            className="w-full rounded-2xl border border-slate-200 dark:border-slate-700 bg-slate-50 dark:bg-[#0B1121] p-4 text-slate-900 dark:text-white focus:border-blue-500 dark:focus:border-blue-500 focus:ring-blue-500 resize-none outline-none transition-colors"
             placeholder="Describe your product or feature idea in detail..."
             value={idea}
             onChange={(e) => updateActiveProjectIdea(e.target.value)}
           />
 
           <div className="mt-6">
-            <p className="text-sm font-medium text-slate-700 mb-3">Generate Artifacts</p>
+            <p className="text-sm font-medium text-slate-700 dark:text-slate-300 mb-3">Generate Artifacts</p>
             <div className="flex flex-wrap gap-3">
               {(Object.keys(artifactLabels) as ArtifactType[]).map((type) => (
                 <button
                   key={type}
                   disabled={!idea.trim() || isLoading}
                   onClick={() => handleGenerate(type)}
-                  className="inline-flex items-center px-4 py-2 rounded-full text-sm font-medium bg-white border border-slate-200 text-slate-700 hover:bg-slate-50 hover:border-slate-300 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 disabled:opacity-50 disabled:cursor-not-allowed transition-colors shadow-sm"
+                  className="inline-flex items-center px-4 py-2 rounded-full text-sm font-medium bg-white dark:bg-[#111827] border border-slate-200 dark:border-slate-700 text-slate-700 dark:text-slate-300 hover:bg-slate-50 dark:hover:bg-slate-800 hover:border-slate-300 dark:hover:border-slate-600 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 dark:focus:ring-offset-[#111827] disabled:opacity-50 disabled:cursor-not-allowed transition-colors shadow-sm"
                 >
                   <Sparkles className="w-4 h-4 mr-2 text-blue-500" />
                   {artifactLabels[type]}
@@ -228,7 +250,7 @@ function App() {
         </div>
 
         {error && (
-          <div className="p-4 bg-red-50 text-red-700 rounded-2xl border border-red-100 flex items-start">
+          <div className="p-4 bg-red-50 dark:bg-red-900/30 text-red-700 dark:text-red-400 rounded-2xl border border-red-100 dark:border-red-900/50 flex items-start">
             <div className="mt-0.5">
               <svg className="w-5 h-5 mr-3" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z" />
@@ -239,8 +261,8 @@ function App() {
         )}
 
         {(isLoading || activeProject?.artifacts.length) ? (
-          <div className="bg-white rounded-3xl overflow-hidden shadow-sm border border-slate-200 transition-all duration-300 ease-in-out">
-            <div className="px-6 py-4 border-b border-slate-100 flex items-center justify-between bg-slate-50/50 overflow-x-auto">
+          <div className="bg-white dark:bg-[#111827] rounded-3xl overflow-hidden shadow-sm border border-slate-200 dark:border-slate-800 transition-all duration-300 ease-in-out">
+            <div className="px-6 py-4 border-b border-slate-100 dark:border-slate-800 flex items-center justify-between bg-slate-50/50 dark:bg-slate-800/30 overflow-x-auto">
               <div className="flex items-center gap-2">
                 {activeProject?.artifacts.map(art => (
                   <button
@@ -248,8 +270,8 @@ function App() {
                     onClick={() => setActiveArtifact(art)}
                     className={`px-3 py-1.5 text-sm font-medium rounded-lg transition-colors flex items-center max-w-full ${
                       activeArtifact?.id === art.id
-                        ? 'bg-slate-200 text-slate-800'
-                        : 'text-slate-500 hover:bg-slate-100'
+                        ? 'bg-slate-200 dark:bg-slate-700 text-slate-800 dark:text-slate-200'
+                        : 'text-slate-500 dark:text-slate-400 hover:bg-slate-100 dark:hover:bg-slate-800'
                     }`}
                   >
                     <FileText className="w-4 h-4 mr-2 flex-shrink-0" />
@@ -257,7 +279,7 @@ function App() {
                   </button>
                 ))}
                 {isLoading && (
-                  <div className="flex items-center px-3 py-1.5 text-sm font-medium text-slate-500">
+                  <div className="flex items-center px-3 py-1.5 text-sm font-medium text-slate-500 dark:text-slate-400">
                     <Loader2 className="w-4 h-4 mr-2 animate-spin" />
                     Generating...
                   </div>
@@ -266,7 +288,7 @@ function App() {
               {!isLoading && activeArtifact && (
                 <button
                   onClick={handleExport}
-                  className="flex-shrink-0 ml-4 inline-flex items-center px-3 py-1.5 text-sm font-medium text-slate-600 hover:text-slate-900 bg-white border border-slate-200 rounded-lg hover:bg-slate-50 transition-colors"
+                  className="flex-shrink-0 ml-4 inline-flex items-center px-3 py-1.5 text-sm font-medium text-slate-600 dark:text-slate-300 hover:text-slate-900 dark:hover:text-white bg-white dark:bg-[#111827] border border-slate-200 dark:border-slate-700 rounded-lg hover:bg-slate-50 dark:hover:bg-slate-800 transition-colors"
                 >
                   <Download className="w-4 h-4 mr-2" />
                   Export MD
@@ -276,16 +298,16 @@ function App() {
             
             <div className="p-8">
               {isLoading && !activeArtifact ? (
-                <div className="py-12 flex flex-col items-center justify-center text-slate-500">
+                <div className="py-12 flex flex-col items-center justify-center text-slate-500 dark:text-slate-400">
                   <Loader2 className="w-8 h-8 animate-spin mb-4 text-blue-500" />
                   <p>Analyzing requirements and writing documentation...</p>
                 </div>
               ) : activeArtifact ? (
-                <div className="markdown-body text-slate-800">
+                <div className="markdown-body text-slate-800 dark:text-slate-200">
                   <Markdown>{activeArtifact.content}</Markdown>
                 </div>
               ) : (
-                 <div className="py-12 flex flex-col items-center justify-center text-slate-400">
+                 <div className="py-12 flex flex-col items-center justify-center text-slate-400 dark:text-slate-500">
                   <FileText className="w-8 h-8 mb-4 opacity-50" />
                   <p>Select an artifact to view</p>
                 </div>
@@ -294,8 +316,39 @@ function App() {
           </div>
         ) : null}
       </main>
+      </div>
     </div>
   );
 }
 
-export default App;
+export default function App() {
+  const [showDashboard, setShowDashboard] = useState(false);
+  const [showAuthModal, setShowAuthModal] = useState(false);
+  const [authMode, setAuthMode] = useState<'login' | 'signup'>('signup');
+
+  const handleAuthSuccess = () => {
+    setShowAuthModal(false);
+    setShowDashboard(true);
+  };
+
+  const openAuth = (mode: 'login' | 'signup') => {
+    setAuthMode(mode);
+    setShowAuthModal(true);
+  };
+
+  return (
+    <ThemeProvider>
+      {showDashboard ? (
+        <Dashboard onBack={() => setShowDashboard(false)} />
+      ) : (
+        <LandingPage onLogin={() => openAuth('login')} onSignup={() => openAuth('signup')} />
+      )}
+      <AuthModal 
+        isOpen={showAuthModal} 
+        onClose={() => setShowAuthModal(false)}
+        onSuccess={handleAuthSuccess}
+        initialMode={authMode}
+      />
+    </ThemeProvider>
+  );
+}
